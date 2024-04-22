@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity, TextInput, Text, Platform, SafeAreaView, StatusBar } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableOpacity, TextInput, Text, Platform, StatusBar, ActivityIndicator } from 'react-native';
 import { Feather, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { colors } from '../../../assets/Colors/Color';
 
@@ -18,7 +18,7 @@ export default function Login() {
   const navigation = useNavigation();
 
   const login_button_scale_progress = useSharedValue(circleDiameter);
-  const icon_scale_progress = useSharedValue(1);
+  const icon_scale_progress = useSharedValue(circleDiameter);
   const icon_opacity_progress = useSharedValue(1);
   const color_icon_scale_animation = useSharedValue("transparent");
 
@@ -29,6 +29,7 @@ export default function Login() {
 
   const [change_text, onChangeModeSign] = useState('Hai già un account? Accedi');
   const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const [isLoginButtonPressed, setIsLoginButtonPressed] = useState(1);
 
   useEffect(() => {
     if(!isSignUpMode){
@@ -58,6 +59,9 @@ export default function Login() {
       width: login_button_scale_progress.value,
       height: login_button_scale_progress.value,
       borderRadius: login_button_scale_progress.value / 2,
+      backgroundColor: "black",
+      alignItems: "center",
+      justifyContent: "center"
     };
   });
 
@@ -66,17 +70,24 @@ export default function Login() {
       backgroundColor: color_icon_scale_animation.value,
       width: icon_scale_progress.value,
       height: icon_scale_progress.value,
-      opacity: icon_opacity_progress.value
+      opacity: icon_opacity_progress.value,
+      borderRadius: icon_scale_progress.value /2,
+      justifyContent: "center",
+      alignItems: "center"
     };
   });
 
   const onLoginButtonPress = async () => {
     try {
+      setIsLoginButtonPressed(0);
+      setIsButtonDisabled(true);
       if (!isSignUpMode) {
         await createUserWithEmailAndPassword(auth, email_text, password_text);
       } else {
         await signInWithEmailAndPassword(auth, email_text, password_text);
       }
+
+      setIsButtonDisabled(false);
 
       login_button_scale_progress.value = withTiming(100 * circleDiameter, { duration: 500 });
       
@@ -92,9 +103,10 @@ export default function Login() {
         navigation.navigate('Home');
       }, 500);
     }catch (error){
+      setIsLoginButtonPressed(1);
+      setIsButtonDisabled(false);
       console.error(error);
-    }
-    
+    };
   };
   
 
@@ -164,9 +176,13 @@ export default function Login() {
             </View>
 
             <TouchableOpacity style={[styles.login_button, isButtonDisabled ? styles.disabled_login_button : null]} disabled={isButtonDisabled} onPress={onLoginButtonPress}>
-              <Animated.View style={[styles.login_button, loginButtonStyle]}>
-                <Animated.View style={[{height: circleDiameter, width: circleDiameter, borderRadius: circleDiameter/2, justifyContent: "center", alignItems: "center"}, iconContainerStyle]}>
-                  <Feather name="arrow-right" size={0.05 * height} color="white"/>
+              <Animated.View style={loginButtonStyle}>
+                <Animated.View style={iconContainerStyle}>
+                  {isLoginButtonPressed ? (
+                    <Feather name="arrow-right" size={0.05 * height} color={"white"}/>
+                  ) : (
+                    <ActivityIndicator size="large" color="white" />
+                  )}
                 </Animated.View>
               </Animated.View>
             </TouchableOpacity>
@@ -174,13 +190,12 @@ export default function Login() {
         </View>
       </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.light,
-    marginTop: StatusBar.currentHeight
   },
   header: {
     height: "8%",

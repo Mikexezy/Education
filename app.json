@@ -6,11 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -22,7 +17,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "pan",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -49,6 +44,6 @@
           ]
         }
       ]
-    ],
+    ]
   }
 }
