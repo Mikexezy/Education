@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import Header from '../../Components/Header/Header';
 
-import {auth, db} from '../../../firebaseConfig'
+import {auth} from '../../../firebaseConfig'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const { width, height } = Dimensions.get('window');

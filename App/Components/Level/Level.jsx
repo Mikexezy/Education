@@ -1,4 +1,4 @@
-import { View, StyleSheet, Platform } from 'react-native';
+import { Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { colors } from '../../../assets/Colors/Color';
 
@@ -23,11 +23,16 @@ export default function Level({ id, title, progress }) {
                   elevation: 5,
                 },
               }),
+        },
+        titleStyle: {
+          fontFamily: "OutfitEB",
+          color: progress < 100? "black":"white",
         }
     }); 
 
     return (
-        <View style={styles.container}>
-        </View>
+        <TouchableOpacity style={styles.container}>
+          <Text style={styles.titleStyle}> {title} </Text>
+        </TouchableOpacity>
     );
 };
