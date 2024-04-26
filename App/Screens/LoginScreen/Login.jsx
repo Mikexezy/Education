@@ -8,11 +8,35 @@ import { useNavigation } from '@react-navigation/native';
 
 import Header from '../../Components/Header/Header';
 
-import {auth} from '../../../firebaseConfig'
+import { auth, db } from '../../../firebaseConfig'
+import { ref, set } from 'firebase/database';
+
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const { width, height } = Dimensions.get('window');
 const circleDiameter = 0.1 * height;
+
+const nodesToAdd = {
+  Lvl1: 0,
+  Lvl2: 0,
+  Lvl3: 0,
+  Lvl4: {
+    Part1: 0,
+    Part2: 0
+  },
+  Lvl5: 0,
+  Lvl6: 0,
+  Lvl7: 0,
+  Lvl8: 0,
+  Lvl9: 0,
+  Lvl10: 0,
+  Lvl11: 0,
+  Lvl12: 0,
+  Lvl13: 0,
+  Lvl14: 0,
+  Lvl15: 0,
+  Lvl16: 0,
+};
 
 export default function Login() {
   const navigation = useNavigation();
@@ -82,7 +106,10 @@ export default function Login() {
       setIsLoginButtonPressed(0);
       setIsButtonDisabled(true);
       if (!isSignUpMode) {
-        await createUserWithEmailAndPassword(auth, email_text, password_text);
+        const userCredential = await createUserWithEmailAndPassword(auth, email_text, password_text);
+        const userUid = userCredential.user.uid;
+        const userRef = ref(db, `users/${userUid}`);
+        await set(userRef, nodesToAdd);
       } else {
         await signInWithEmailAndPassword(auth, email_text, password_text);
       }
@@ -100,7 +127,7 @@ export default function Login() {
       }, 200);
 
       setTimeout(() => {
-        navigation.navigate('Home');
+        navigation.replace('Home');
       }, 500);
     }catch (error){
       setIsLoginButtonPressed(1);
@@ -112,7 +139,8 @@ export default function Login() {
 
   return (
       <View style={styles.container}>
-        <Header/>
+        <Header showProfileButton={false}/>
+        <View style={{height:"10%"}}/>
         <View style={styles.login}>
           <View style={styles.login_box}>
             <Text style={styles.login_title}>
