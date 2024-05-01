@@ -6,13 +6,16 @@ import Level from '../../Components/Level/Level';
 import { auth, db, st } from '../../../firebaseConfig';
 import { get, ref } from 'firebase/database';
 import { ref as storageRef, listAll } from 'firebase/storage';
-import { logEvent } from 'firebase/analytics';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+
 
 const {height} = Dimensions.get('window');
+const headerDimension = (0.1*height) + StatusBar.currentHeight;
 
 export default function Home() {
   const [levelData, setLevelData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const headerHeight = useSharedValue(headerDimension);
 
   useEffect(() => {
     fetchLevelData();
@@ -68,14 +71,39 @@ export default function Home() {
     setRefreshing(false);
   };
 
+  const handleScroll = (event) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const threshold = 1;
+    const newOpacity = offsetY < threshold ? headerDimension : 0;
+  
+    headerHeight.value = withTiming(newOpacity, { duration: 20 });
+  };
+
+  const animatedHeaderStyle = useAnimatedStyle(() => {
+    return {
+      opacity: headerHeight.value,
+      height: headerHeight.value,
+      width:"100%",
+      backgroundColor: "transparent",
+      position: "absolute",
+      top: 0,
+      zIndex: 10,
+      overflow: "hidden"
+    };
+  });
+
   return (
     <View style={styles.container}>
-      <Header showProfileButton={true} />
+      <Animated.View style={animatedHeaderStyle}>
+        <Header showProfileButton={true} />
+      </Animated.View>
       <View style={styles.lvlSection}>
         <ScrollView
           contentContainerStyle={styles.lvlList}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} progressViewOffset={(0.13*height) + StatusBar.currentHeight}/>}
           showsVerticalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
         >
           <View style={{height: (0.1*height) + StatusBar.currentHeight}}/>
           {levelData.map((level, index) => (

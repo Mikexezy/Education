@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const {height} = Dimensions.get('window');
 
-export default function Header({showProfileButton}) {
+export default function Header({showProfileButton, headerHeight}) {
   const navigation = useNavigation();
 
   const handleLogout = async () => {
@@ -40,7 +40,7 @@ export default function Header({showProfileButton}) {
 
 const styles = StyleSheet.create({
     header: {
-        height: (0.1*height) + StatusBar.currentHeight,
+        height: headerHeight,
         width: "100%",
         backgroundColor: "transparent",
         justifyContent: "center",
