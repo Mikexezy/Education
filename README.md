@@ -7,4 +7,4 @@
 PWA realizzata insieme alla classe terza dell'istituto A. Manzoni di Caltanissetta
 
 ## Obiettivo
-Fornire uno strumento educativo riguardante il mondo dell'economia in modo totalmente gratuito e divertente.
+Fornire uno strumento educativo sull'economia che sia totalmente gratuito e divertente.
