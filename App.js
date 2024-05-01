@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Login from './App/Screens/LoginScreen/Login';
 import Home from './App/Screens/HomeScreen/Home';
+import VideoScreen from './App/Components/Level/VideoScreen';
+
 import SplashScreen from './App/Screens/SplashScreen/SplashScreen';
 
 import { auth } from './firebaseConfig';
@@ -38,6 +40,7 @@ export default function App() {
       <Stack.Navigator initialRouteName={auth.currentUser ? 'Home' : 'Login'}>
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name="VideoScreen" component={VideoScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

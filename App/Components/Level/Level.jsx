@@ -3,8 +3,15 @@ import React from 'react';
 import { colors } from '../../../assets/Colors/Color';
 import * as Progress from 'react-native-progress';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Level({ title, progress }) {
+export default function Level({ id, title, progress }) {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    navigation.navigate('VideoScreen', {levelId: id+1});
+  };
+
   const styles = StyleSheet.create({
     container: {
         backgroundColor: progress == 100 ? "green" : colors.light,
@@ -77,7 +84,7 @@ export default function Level({ title, progress }) {
             <Progress.Circle showsText={true} textStyle={{fontFamily: "OutfitEB"}} progress={progress/100} size={70} color={progress < 100 ? "#22ba22" : colors.light}/>
           </View>
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.button} disabled={progress == 100 ? true : false}>
+            <TouchableOpacity style={styles.button} disabled={progress == 100 ? true : false} onPress={handlePress}>
               <Text style={styles.buttonText}> {progress == 100 ? "Completato": progress == 0 ? "Inizia" : "Continua"} </Text>
               {progress < 100 ? <FontAwesome5 name="arrow-right" size={20} color={progress < 100 ? "black" : colors.light} /> : null}
             </TouchableOpacity>
