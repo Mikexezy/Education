@@ -4,7 +4,7 @@ import { colors } from '../../../assets/Colors/Color';
 import * as Progress from 'react-native-progress';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-export default function Level({ id, title, progress }) {
+export default function Level({ title, progress }) {
   const styles = StyleSheet.create({
     container: {
         backgroundColor: progress == 100 ? "green" : colors.light,

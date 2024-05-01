@@ -8,8 +8,32 @@ import { useNavigation } from '@react-navigation/native';
 
 const {height} = Dimensions.get('window');
 
-export default function Header({showProfileButton, headerHeight}) {
+export default function Header({showProfileButton, visible}) {
   const navigation = useNavigation();
+
+  const styles = StyleSheet.create({
+    header: {
+        height: 0.15 * height,
+        width: "100%",
+        backgroundColor: "transparent",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        top: 0,
+        zIndex: 10,
+        opacity: visible
+    },
+    logo: {
+        backgroundColor: "transparent",
+        height: "100%",
+        width: "50%",
+        resizeMode: "contain"
+    },
+    statusBarPadding: {
+      height: StatusBar.currentHeight,
+      backgroundColor: colors.light
+    }
+});
 
   const handleLogout = async () => {
     try {
@@ -37,26 +61,3 @@ export default function Header({showProfileButton, headerHeight}) {
     </View>
   )
 };
-
-const styles = StyleSheet.create({
-    header: {
-        height: headerHeight,
-        width: "100%",
-        backgroundColor: "transparent",
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute",
-        top: 0,
-        zIndex: 10
-    },
-    logo: {
-        backgroundColor: "transparent",
-        height: "100%",
-        width: "50%",
-        resizeMode: "contain"
-    },
-    statusBarPadding: {
-      height: StatusBar.currentHeight,
-      backgroundColor: colors.light
-    }
-});

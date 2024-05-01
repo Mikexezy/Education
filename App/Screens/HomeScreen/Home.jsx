@@ -1,21 +1,21 @@
-import { View, StyleSheet, ScrollView, RefreshControl, Dimensions, StatusBar } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
+import { View, StyleSheet, ScrollView, RefreshControl, Dimensions, StatusBar, Animated } from 'react-native';
 import { colors } from '../../../assets/Colors/Color';
 import Header from '../../Components/Header/Header';
 import Level from '../../Components/Level/Level';
 import { auth, db, st } from '../../../firebaseConfig';
 import { get, ref } from 'firebase/database';
 import { ref as storageRef, listAll } from 'firebase/storage';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
-
-const {height} = Dimensions.get('window');
-const headerDimension = (0.1*height) + StatusBar.currentHeight;
+const { height } = Dimensions.get('window');
+const HEADER_HEIGHT = (0.1 * height) + StatusBar.currentHeight;
 
 export default function Home() {
   const [levelData, setLevelData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const headerHeight = useSharedValue(headerDimension);
+  const [scrollOffset, setScrollOffset] = useState(0);
+
+  const headerOpacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     fetchLevelData();
@@ -35,21 +35,21 @@ export default function Home() {
             return levelNumA - levelNumB;
           })
           .map(async ([title, progress]) => {
-            let progressValue = 0; 
+            let progressValue = 0;
             if (progress !== null && typeof progress === 'object') {
               progressValue = Object.values(progress).reduce((acc, curr) => acc + curr, 0);
-              if(progressValue != 0)progressValue /= 2;
+              if (progressValue != 0) progressValue /= 2;
             } else {
-              progressValue = progress || 0; 
+              progressValue = progress || 0;
             }
             let stRef = storageRef(st, title);
             let elementList = await listAll(stRef);
             const elementListLength = elementList.prefixes.length;
-            if(elementListLength > 0){
-              stRef = storageRef(st, title+"/"+elementList.prefixes[0].name);
+            if (elementListLength > 0) {
+              stRef = storageRef(st, title + "/" + elementList.prefixes[0].name);
               elementList = await listAll(stRef);
               title = elementList.items[0].name;
-            }else{
+            } else {
               title = elementList.items[0].name;
             }
             title = title.replace(/Lvl.+$/, '');
@@ -65,47 +65,38 @@ export default function Home() {
     }
   };
 
+  const handleScroll = (event) => {
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    const direction = currentOffset > 0 && currentOffset > scrollOffset ? 'down' : 'up';
+    setScrollOffset(currentOffset);
+
+    Animated.timing(headerOpacity, {
+      toValue: direction === 'down' ? 0 : 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  };
+
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchLevelData();
     setRefreshing(false);
   };
 
-  const handleScroll = (event) => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const threshold = 1;
-    const newOpacity = offsetY < threshold ? headerDimension : 0;
-  
-    headerHeight.value = withTiming(newOpacity, { duration: 20 });
-  };
-
-  const animatedHeaderStyle = useAnimatedStyle(() => {
-    return {
-      opacity: headerHeight.value,
-      height: headerHeight.value,
-      width:"100%",
-      backgroundColor: "transparent",
-      position: "absolute",
-      top: 0,
-      zIndex: 10,
-      overflow: "hidden"
-    };
-  });
-
   return (
     <View style={styles.container}>
-      <Animated.View style={animatedHeaderStyle}>
+      <Animated.View style={[styles.header, { opacity: headerOpacity }]}>
         <Header showProfileButton={true} />
       </Animated.View>
       <View style={styles.lvlSection}>
         <ScrollView
           contentContainerStyle={styles.lvlList}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} progressViewOffset={(0.13*height) + StatusBar.currentHeight}/>}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} progressViewOffset={HEADER_HEIGHT} />}
           showsVerticalScrollIndicator={false}
           onScroll={handleScroll}
           scrollEventThrottle={16}
         >
-          <View style={{height: (0.1*height) + StatusBar.currentHeight}}/>
+          <View style={{ height: HEADER_HEIGHT }} />
           {levelData.map((level, index) => (
             <Level key={index} title={level.title} progress={level.progress} />
           ))}
@@ -129,5 +120,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     flexGrow: 1,
     alignItems: "center"
+  },
+  header: {
+    height: HEADER_HEIGHT,
+    width: "100%",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex:10
   }
 });
