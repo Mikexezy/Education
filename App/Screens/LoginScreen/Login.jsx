@@ -18,73 +18,91 @@ const circleDiameter = 0.1 * height;
 
 const nodesToAdd = {
   Lvl1: {
-    videoid: 0,
+    name: "Educazione Finanziaria",
+    videoid: "LtjTWqS5F_0",
     progress: 0 
   },
   Lvl2: {
-    videoid: 0,
+    name: "Banca",
+    videoid: "U-RWlFzIcL4",
     progress: 0 
   },
   Lvl3: {
-    videoid: 0,
+    name: "Inflazione",
+    videoid: "wMUx4sOxcMM",
     progress: 0 
   },
   Lvl4: {
+    name: "Metodi Di Pagamento",
     Part1: {
-      videoid: 0,
+      name: "Metodi Di Pagamento Parte 1",
+      videoid: "V6Fr5jG8io0",
       progress: 0 
     },
     Part2: {
-      videoid: 0,
+      name: "Metodi Di Pagamento Parte 2",
+      videoid: "WBjPHI8zj8k",
       progress: 0 
     }
   },
   Lvl5: {
-    videoid: 0,
+    name: "Truffe E Rischi Online",
+    videoid: "TaoZbr_a6rI",
     progress: 0 
   },
   Lvl6: {
-    videoid: 0,
+    name: "Insidie Della Rete",
+    videoid: "Tph8hC9iI_c",
     progress: 0 
   },
   Lvl7: {
-    videoid: 0,
+    name: "Reddito",
+    videoid: "mpXx4NLnYfQ",
     progress: 0 
   },
   Lvl8: {
-    videoid: 0,
+    name: "Tasse",
+    videoid: "Ti7kT-bWeO4",
     progress: 0 
   },
   Lvl9: {
-    videoid: 0,
+    name: "Finanziamenti",
+    videoid: "SdsWhAg6zBs",
     progress: 0 
   },
   Lvl10: {
-    videoid: 0,
+    name: "Investimenti",
+    videoid: "m6DXWBCK_qA",
     progress: 0 
   },
   Lvl11: {
-    videoid: 0,
+    name: "Assegni",
+    videoid: "PwaSQ7Bi9z4",
     progress: 0 
   },
   Lvl12: {
-    videoid: 0,
+    name: "Mutuo",
+    videoid: "luj58oO75Ec",
     progress: 0 
   },
   Lvl13: {
-    videoid: 0,
+    name: "Assicurazioni",
+    videoid: "QT-iu1MTbUE",
     progress: 0 
   },
   Lvl14: {
-    videoid: 0,
+    name: "Criptovalute",
+    videoid: "6g0hW8HEXdU",
     progress: 0 
   },
   Lvl15: {
-    videoid: 0,
+    name: "Risorse Finanziarie",
+    videoid: "IKohB65U6lA",
     progress: 0 
   },
   Lvl16: {
-    videoid: 0,
+    name: "Finanza Sostenibile",
+    videoid: "0GBHxiZy67U",
     progress: 0 
   },
 };

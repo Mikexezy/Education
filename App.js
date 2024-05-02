@@ -41,9 +41,16 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={auth.currentUser ? 'Home' : 'Login'}>
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="VideoScreen" component={VideoScreen} options={{ headerShown: true,  headerTitleAlign: "center", headerTitleStyle:{fontFamily: "OutfitEB"}, headerStyle:{backgroundColor: colors.light}}} />
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false, animationEnabled: false, }} />
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false, animationEnabled: false, }} />
+        <Stack.Screen name="VideoScreen" component={VideoScreen} options={({ route }) => ({ 
+          title: route.params.title,
+          headerShown: true,  
+          headerTitleAlign: "center", 
+          headerTitleStyle: { fontFamily: "OutfitEB" }, 
+          headerStyle: { backgroundColor: colors.light },
+          animationEnabled: false
+        })} />
       </Stack.Navigator>
     </NavigationContainer>
   );

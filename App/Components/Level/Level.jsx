@@ -5,11 +5,11 @@ import * as Progress from 'react-native-progress';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Level({ id, title, progress, videoid }) {
+export default function Level({ id, title, progress, videoid, op }) {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    navigation.navigate('VideoScreen', {levelId: id+1, videoid: videoid});
+    navigation.navigate('VideoScreen', {levelId: id+1, videoid: videoid, title: title});
   };
 
   const styles = StyleSheet.create({
@@ -20,6 +20,7 @@ export default function Level({ id, title, progress, videoid }) {
         borderRadius: 20,
         padding: 10,
         marginBottom: 7,
+        opacity: op,
         ...Platform.select({
             ios: {
               shadowColor: '#000',
@@ -84,7 +85,7 @@ export default function Level({ id, title, progress, videoid }) {
             <Progress.Circle showsText={true} textStyle={{fontFamily: "OutfitEB"}} progress={progress/100} size={70} color={progress < 100 ? "#22ba22" : colors.light}/>
           </View>
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.button} disabled={progress == 100 ? true : false} onPress={handlePress}>
+            <TouchableOpacity style={styles.button} disabled={(progress == 100) ||  op != 1 ? true : false} onPress={handlePress}>
               <Text style={styles.buttonText}> {progress == 100 ? "Completato": progress == 0 ? "Inizia" : "Continua"} </Text>
               {progress < 100 ? <FontAwesome5 name="arrow-right" size={20} color={progress < 100 ? "black" : colors.light} /> : null}
             </TouchableOpacity>
