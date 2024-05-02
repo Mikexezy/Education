@@ -1,20 +1,20 @@
 import { Text, StyleSheet, Platform, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { colors } from '../../../assets/Colors/Color';
 import * as Progress from 'react-native-progress';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Level({ id, title, progress, videoid, op }) {
+export default function Level({ id, title, progress, reallyProgress, videoid, op }) {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    navigation.navigate('VideoScreen', {levelId: id+1, videoid: videoid, title: title});
+    navigation.navigate('VideoScreen', {levelId: id+1, videoid: Array.isArray(progress) ? (progress[0] < 100 ? videoid[0] : videoid[1]) : videoid , title: title, part: Array.isArray(progress) ? (progress[0] < 100 ? 1 : 2) : 0});
   };
 
   const styles = StyleSheet.create({
     container: {
-        backgroundColor: progress == 100 ? "green" : colors.light,
+        backgroundColor: reallyProgress == 100 ? "green" : colors.light,
         width: "95%",
         height: 180,
         borderRadius: 20,
@@ -35,7 +35,7 @@ export default function Level({ id, title, progress, videoid, op }) {
     },
     titleStyle: {
       fontFamily: "OutfitEB",
-      color: progress < 100? "black":"white",
+      color: reallyProgress < 100? "black":"white",
     },
     header:{
       backgroundColor: "transparent",
@@ -64,14 +64,14 @@ export default function Level({ id, title, progress, videoid, op }) {
       height: "80%",
       backgroundColor: "transparent",
       borderWidth: 1,
-      borderColor: progress < 100 ? "black" : colors.light,
+      borderColor: reallyProgress < 100 ? "black" : colors.light,
       borderRadius: 50,
       justifyContent: "space-around",
       alignItems: "center",
       flexDirection: "row"
     },
     buttonText:{
-      color: progress < 100 ? "black" : colors.light ,
+      color: reallyProgress < 100 ? "black" : colors.light ,
       fontFamily: "OutfitEB"
     }
   }); 
@@ -82,12 +82,12 @@ export default function Level({ id, title, progress, videoid, op }) {
             <Text style={styles.titleStyle}> {title} </Text>
           </View>
           <View style={styles.object}>
-            <Progress.Circle showsText={true} textStyle={{fontFamily: "OutfitEB"}} progress={progress/100} size={70} color={progress < 100 ? "#22ba22" : colors.light}/>
+            <Progress.Circle showsText={true} textStyle={{fontFamily: "OutfitEB"}} progress={reallyProgress/100} size={70} color={reallyProgress < 100 ? "#22ba22" : colors.light}/>
           </View>
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.button} disabled={(progress == 100) ||  op != 1 ? true : false} onPress={handlePress}>
-              <Text style={styles.buttonText}> {progress == 100 ? "Completato": progress == 0 ? "Inizia" : "Continua"} </Text>
-              {progress < 100 ? <FontAwesome5 name="arrow-right" size={20} color={progress < 100 ? "black" : colors.light} /> : null}
+            <TouchableOpacity style={styles.button} disabled={(reallyProgress == 100) ||  op != 1 ? true : false} onPress={handlePress}>
+              <Text style={styles.buttonText}> {reallyProgress == 100 ? "Completato": reallyProgress == 0 ? "Inizia" : "Continua"} </Text>
+              {reallyProgress < 100 ? <FontAwesome5 name="arrow-right" size={20} color={reallyProgress < 100 ? "black" : colors.light} /> : null}
             </TouchableOpacity>
           </View>
         </View>

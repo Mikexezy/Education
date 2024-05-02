@@ -35,12 +35,10 @@ const nodesToAdd = {
   Lvl4: {
     name: "Metodi Di Pagamento",
     Part1: {
-      name: "Metodi Di Pagamento Parte 1",
       videoid: "V6Fr5jG8io0",
       progress: 0 
     },
     Part2: {
-      name: "Metodi Di Pagamento Parte 2",
       videoid: "WBjPHI8zj8k",
       progress: 0 
     }

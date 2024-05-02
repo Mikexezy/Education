@@ -31,12 +31,11 @@ export default function Home() {
         const id = Object.keys(data).map((element, index) => ({
           level: element,
           title: data[element].name,
-          progress: data[element].progress != undefined && data[element].progress != null ? data[element].progress : (data[element].Part1.progress + data[element].Part2.progress) / 2,
+          progress: data[element].progress != undefined && data[element].progress != null ? data[element].progress : [data[element].Part1.progress, data[element].Part2.progress],
           videoid: data[element].videoid != undefined && data[element].videoid != null ? data[element].videoid : [data[element].Part1.videoid, data[element].Part2.videoid]
         }));
 
         id.sort((a, b) => parseInt(a.level.slice(3)) - parseInt(b.level.slice(3)));
-
         setLevelData(id);
       } else {
         console.log('No data available');
@@ -81,8 +80,10 @@ export default function Home() {
           {levelData.map((item, index) => (
             <Level
               key={index}
+              id={index}
               title={item.title}
               progress={item.progress}
+              reallyProgress={Array.isArray(item.progress) ? ((item.progress[0] + item.progress[1])/2) : item.progress}
               videoid={item.videoid}
               op={index == 0 ? 1 : (levelData[index - 1].progress == 100 ? 1 : 0.5)}
             />

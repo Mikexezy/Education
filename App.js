@@ -28,7 +28,7 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setShowSplash(false); // Nascondi lo SplashScreen indipendentemente dall'autenticazione dell'utente
+      setShowSplash(false);
     });
 
     return () => unsubscribe();
@@ -44,7 +44,7 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false, animationEnabled: false, }} />
         <Stack.Screen name="VideoScreen" component={VideoScreen} options={({ route }) => ({ 
-          title: route.params.title,
+          title: route.params.title + (route.params.part == 0 ? "" : " Parte " + route.params.part),
           headerShown: true,  
           headerTitleAlign: "center", 
           headerTitleStyle: { fontFamily: "OutfitEB" }, 
