@@ -17,25 +17,76 @@ const { width, height } = Dimensions.get('window');
 const circleDiameter = 0.1 * height;
 
 const nodesToAdd = {
-  Lvl1: 0,
-  Lvl2: 0,
-  Lvl3: 0,
-  Lvl4: {
-    Part1: 0,
-    Part2: 0
+  Lvl1: {
+    videoid: 0,
+    progress: 0 
   },
-  Lvl5: 0,
-  Lvl6: 0,
-  Lvl7: 0,
-  Lvl8: 0,
-  Lvl9: 0,
-  Lvl10: 0,
-  Lvl11: 0,
-  Lvl12: 0,
-  Lvl13: 0,
-  Lvl14: 0,
-  Lvl15: 0,
-  Lvl16: 0,
+  Lvl2: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl3: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl4: {
+    Part1: {
+      videoid: 0,
+      progress: 0 
+    },
+    Part2: {
+      videoid: 0,
+      progress: 0 
+    }
+  },
+  Lvl5: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl6: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl7: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl8: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl9: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl10: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl11: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl12: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl13: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl14: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl15: {
+    videoid: 0,
+    progress: 0 
+  },
+  Lvl16: {
+    videoid: 0,
+    progress: 0 
+  },
 };
 
 export default function Login() {

@@ -5,11 +5,11 @@ import * as Progress from 'react-native-progress';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Level({ id, title, progress }) {
+export default function Level({ id, title, progress, videoid }) {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    navigation.navigate('VideoScreen', {levelId: id+1});
+    navigation.navigate('VideoScreen', {levelId: id+1, videoid: videoid});
   };
 
   const styles = StyleSheet.create({

@@ -3,6 +3,8 @@ import { useFonts } from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { FontAwesome5 } from '@expo/vector-icons';
+
 import Login from './App/Screens/LoginScreen/Login';
 import Home from './App/Screens/HomeScreen/Home';
 import VideoScreen from './App/Components/Level/VideoScreen';
@@ -11,6 +13,7 @@ import SplashScreen from './App/Screens/SplashScreen/SplashScreen';
 
 import { auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
+import { colors } from './assets/Colors/Color';
 
 const Stack = createStackNavigator();
 
@@ -40,7 +43,7 @@ export default function App() {
       <Stack.Navigator initialRouteName={auth.currentUser ? 'Home' : 'Login'}>
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="VideoScreen" component={VideoScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="VideoScreen" component={VideoScreen} options={{ headerShown: true,  headerTitleAlign: "center", headerTitleStyle:{fontFamily: "OutfitEB"}, headerStyle:{backgroundColor: colors.light}}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

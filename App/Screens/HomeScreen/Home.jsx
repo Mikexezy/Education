@@ -5,15 +5,14 @@ import Header from '../../Components/Header/Header';
 import Level from '../../Components/Level/Level';
 import { auth, db, st } from '../../../firebaseConfig';
 import { get, ref } from 'firebase/database';
-import { ref as storageRef, listAll } from 'firebase/storage';
 
 const { height } = Dimensions.get('window');
 const HEADER_HEIGHT = (0.1 * height) + StatusBar.currentHeight;
 
 export default function Home() {
-  const [levelData, setLevelData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [scrollOffset, setScrollOffset] = useState(0);
+  const [levelData, setLevelData] = useState([]);
 
   const headerOpacity = useRef(new Animated.Value(1)).current;
 
@@ -22,46 +21,27 @@ export default function Home() {
   }, []);
 
   const fetchLevelData = async () => {
+    const userUid = auth.currentUser.uid;
+    const databaseRef = ref(db, `users/${userUid}`);
+
     try {
-      const userId = auth.currentUser.uid;
-      const userRef = ref(db, `users/${userId}`);
-      const snapshot = await get(userRef);
+      const snapshot = await get(databaseRef);
       if (snapshot.exists()) {
-        const userData = snapshot.val();
-        const levels = await Promise.all(Object.entries(userData)
-          .sort((a, b) => {
-            const levelNumA = parseInt(a[0].replace("Lvl", ""));
-            const levelNumB = parseInt(b[0].replace("Lvl", ""));
-            return levelNumA - levelNumB;
-          })
-          .map(async ([title, progress]) => {
-            let progressValue = 0;
-            if (progress !== null && typeof progress === 'object') {
-              progressValue = Object.values(progress).reduce((acc, curr) => acc + curr, 0);
-              if (progressValue != 0) progressValue /= 2;
-            } else {
-              progressValue = progress || 0;
-            }
-            let stRef = storageRef(st, title);
-            let elementList = await listAll(stRef);
-            const elementListLength = elementList.prefixes.length;
-            if (elementListLength > 0) {
-              stRef = storageRef(st, title + "/" + elementList.prefixes[0].name);
-              elementList = await listAll(stRef);
-              title = elementList.items[0].name;
-            } else {
-              title = elementList.items[0].name;
-            }
-            title = title.replace(/Lvl.+$/, '');
-            title = title.split(/(?=[A-Z])/).join(' ');
-            return { title, progress: progressValue };
-          }));
-        setLevelData(levels);
+        const data = snapshot.val();
+        const id = Object.keys(data).map((element, index) => ({
+          title: element,
+          progress: data[element].progress != undefined && data[element].progress != null ? data[element].progress : (data[element].Part1.progress + data[element].Part2.progress) / 2,
+          videoid: data[element].videoid != undefined && data[element].videoid != null ? data[element].videoid : [data[element].Part1.videoid, data[element].Part2.videoid]
+        }));
+
+        id.sort((a, b) => parseInt(a.title.slice(3)) - parseInt(b.title.slice(3)));
+
+        setLevelData(id);
       } else {
-        console.log("Nessun dato trovato nel nodo utente.");
+        console.log('No data available');
       }
     } catch (error) {
-      console.error("Si è verificato un errore durante il recupero dei dati dei livelli:", error);
+      console.error('Error fetching level data:', error);
     }
   };
 
@@ -97,14 +77,20 @@ export default function Home() {
           scrollEventThrottle={16}
         >
           <View style={{ height: HEADER_HEIGHT }} />
-          {levelData.map((level, index) => (
-            <Level key={index} title={level.title} progress={level.progress} />
+          {levelData.map((item, index) => (
+            <Level
+              key={index}
+              title={item.title}
+              progress={item.progress}
+              videoid={item.videoid}
+            />
           ))}
         </ScrollView>
       </View>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
