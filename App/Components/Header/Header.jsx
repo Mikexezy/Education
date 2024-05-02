@@ -1,7 +1,7 @@
 import { View, StyleSheet, Image, StatusBar, Dimensions, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { colors } from '../../../assets/Colors/Color';
-import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
@@ -52,7 +52,7 @@ export default function Header({showProfileButton, visible}) {
         <Image source={require('../../../assets/headerLogo.png')} style={styles.logo}/>
         {showProfileButton == true ? 
           <TouchableOpacity onPress={handleLogout} style={{width:"20%", height:"100%", backgroundColor:"transparent", justifyContent:"center", alignItems:"center"}}>
-            <AntDesign name="user" size={30} color="black" />
+            <Ionicons name="exit-outline" size={30} color="black" />
           </TouchableOpacity>
           :
           <View style={{width:"20%", height:"100%"}}/>
