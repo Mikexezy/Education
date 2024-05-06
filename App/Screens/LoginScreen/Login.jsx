@@ -94,11 +94,6 @@ const nodesToAdd = {
     progress: 0 
   },
   Lvl15: {
-    name: "Risorse Finanziarie",
-    videoid: "IKohB65U6lA",
-    progress: 0 
-  },
-  Lvl16: {
     name: "Finanza Sostenibile",
     videoid: "0GBHxiZy67U",
     progress: 0 

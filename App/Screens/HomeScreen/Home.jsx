@@ -37,8 +37,6 @@ export default function Home() {
 
         id.sort((a, b) => parseInt(a.level.slice(3)) - parseInt(b.level.slice(3)));
         setLevelData(id);
-      } else {
-        console.log('No data available');
       }
     } catch (error) {
       console.error('Error fetching level data:', error);

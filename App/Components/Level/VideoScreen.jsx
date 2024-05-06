@@ -1,9 +1,12 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { colors } from '../../../assets/Colors/Color';
 import { db, auth } from '../../../firebaseConfig';
 import { set, ref, get } from 'firebase/database';
+import Coppie from '../Game/Coppie';
+
+const{width, height} = Dimensions.get("window");
 
 export default function VideoScreen({ route }) {
   const[videoEnd, setVideoEnd] = useState(false);
@@ -67,8 +70,11 @@ export default function VideoScreen({ route }) {
         onChangeState={onStateChange}
         initialPlayerParams={{controls: true, modestbranding: 1, rel: 0}}
       />
-      <View style={{flex:1, backgroundColor: "transparent", padding:20}}>
-        {videoEnd == true ? (<View style={{flex:1, backgroundColor: "green"}}/>) : null}
+      <View style={{flex:1, backgroundColor: "transparent", paddingHorizontal: 0.05 * width, flexDirection:"column", justifyContent:"space-around"}}>
+        <View style={{height:0.4 * height, backgroundColor: "red"}}>
+          {videoEnd == true ? (<Coppie height={0.4 * height} width={width - (0.1 * width)} row={3} column={3}/>) : null}
+        </View>
+        <View style={{height:"20%", backgroundColor: "green"}}/>
       </View>
     </View>
   );
