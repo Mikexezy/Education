@@ -20,83 +20,158 @@ const nodesToAdd = {
   Lvl1: {
     name: "Educazione Finanziaria",
     videoid: "LtjTWqS5F_0",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Educazione Finanziaria",
+      word2: "Conoscenza"
+    }
   },
   Lvl2: {
     name: "Banca",
     videoid: "U-RWlFzIcL4",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Banca",
+      word2: "Investimenti",
+      word3: "Economico-Sociale",
+      word4: "Monetaria"
+    }
   },
   Lvl3: {
     name: "Inflazione",
     videoid: "wMUx4sOxcMM",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Inflazione",
+      word2: "Deflazione"
+    }
   },
   Lvl4: {
     name: "Metodi Di Pagamento",
     Part1: {
       videoid: "V6Fr5jG8io0",
-      progress: 0 
+      progress: 0,
+      game:{
+        word1: "Carte Di Credito",
+        word2: "Bonifico Bancario",
+        word3: "Codice IBAN"
+      }
     },
     Part2: {
       videoid: "WBjPHI8zj8k",
-      progress: 0 
+      progress: 0,
+      game:{
+        word1: "Contrassegno",
+        word2: "Paypal",
+        word3: "Carte Prepagate"
+      }
     }
   },
   Lvl5: {
     name: "Truffe E Rischi Online",
     videoid: "TaoZbr_a6rI",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Clonazione",
+      word2: "Phishing",
+      word3: "Trashing",
+      word4: "Boxing"
+    }
   },
   Lvl6: {
     name: "Insidie Della Rete",
     videoid: "Tph8hC9iI_c",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Malware",
+      definition: "Indica un qualsiasi programma informatico usato per disturbare le operazioni svolte da un utente di un computer"
+    },
   },
   Lvl7: {
     name: "Reddito",
     videoid: "mpXx4NLnYfQ",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Reddito",
+      definition: "E' l'entrata netta, espressa in termini monetari, realizzata da un soggetto in un determinato periodo di tempo"
+    }
   },
   Lvl8: {
     name: "Tasse",
     videoid: "Ti7kT-bWeO4",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Tasse",
+      definition: "Tipo di tributo, ovvero una somma di denaro dovuta allo Stato"
+    }
   },
   Lvl9: {
     name: "Finanziamenti",
     videoid: "SdsWhAg6zBs",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Finanziamento",
+      word2: "Beneficiario"
+    }
   },
   Lvl10: {
     name: "Investimenti",
     videoid: "m6DXWBCK_qA",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Investimento",
+      word2: "Budget"
+    }
   },
   Lvl11: {
     name: "Assegni",
     videoid: "PwaSQ7Bi9z4",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Assegno Bancario",
+      word2: "Assegno Circolare"
+    }
   },
   Lvl12: {
     name: "Mutuo",
     videoid: "luj58oO75Ec",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Mutuo",
+      word2: "Prestiti",
+      word3: "Mutuo Ipotecario",
+      word4: "Tasse Fisse",
+      word5: "Tasse Variabili"
+    }
   },
   Lvl13: {
     name: "Assicurazioni",
     videoid: "QT-iu1MTbUE",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Assicurazioni",
+      word2: "Shock Finanziario"
+    }
   },
   Lvl14: {
     name: "Criptovalute",
     videoid: "6g0hW8HEXdU",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Moneta Digitale",
+      word2: "Metodo Alternativo",
+      word3: "Peer-To-Peer",
+      word4: "Bitcoin"
+    }
   },
   Lvl15: {
     name: "Finanza Sostenibile",
     videoid: "0GBHxiZy67U",
-    progress: 0 
+    progress: 0,
+    game:{
+      word1: "Finanza Sostenibile",
+      definition: "Applicazione di sviluppo sostenibile all'attività finanziaria. Garantisce la \"capacità di futuro\", cioè l'uso razionale delle risorse"
+    }
   },
 };
 
