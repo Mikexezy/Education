@@ -4,7 +4,9 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 import { colors } from '../../../assets/Colors/Color';
 import { db, auth } from '../../../firebaseConfig';
 import { set, ref, get } from 'firebase/database';
-import Coppie from '../Game/Coppie';
+import Cards from '../Game/Cards';
+import Definition from '../Game/Definition';
+import Related from '../Game/Related_Words';
 
 const{width, height} = Dimensions.get("window");
 
@@ -19,19 +21,16 @@ export default function VideoScreen({ route }) {
         let userUid = auth.currentUser.uid;
 
         if(route.params.part == 1){
-          databaseRef = ref(db, 'users/'+userUid+"/Lvl"+route.params.levelId+"/Part1");
+          databaseRef = ref(db, 'users/'+userUid+"/Lvl"+route.params.levelId+"/Part1/progress");
 
         }else if(route.params.part == 2){
-          databaseRef = ref(db, 'users/'+userUid+"/Lvl"+route.params.levelId+"/Part2");
+          databaseRef = ref(db, 'users/'+userUid+"/Lvl"+route.params.levelId+"/Part2/progress");
           
         }else{
-          databaseRef = ref(db, 'users/'+userUid+"/Lvl"+route.params.levelId);
+          databaseRef = ref(db, 'users/'+userUid+"/Lvl"+route.params.levelId+"/progress");
         }
 
-        set(databaseRef, {
-          progress: 50,
-          videoid: route.params.videoid
-        });
+        set(databaseRef, 50);
       }}
     , []);
 
@@ -71,8 +70,8 @@ export default function VideoScreen({ route }) {
         initialPlayerParams={{controls: true, modestbranding: 1, rel: 0}}
       />
       <View style={{flex:1, backgroundColor: "transparent", paddingHorizontal: 0.05 * width, flexDirection:"column", justifyContent:"space-around"}}>
-        <View style={{height:0.4 * height, backgroundColor: "red"}}>
-          {videoEnd == true ? (<Coppie height={0.4 * height} width={width - (0.1 * width)} row={3} column={3}/>) : null}
+        <View style={{height:0.4 * height, backgroundColor: "transparent"}}>
+          {videoEnd == true ? (route.params.gameType == "Cards" ? <Cards/> : (route.params.gameType == "Definition" ? <Definition/> : (route.params.gameType == "Related-Words" ? <Related/> : null))) : null}
         </View>
         <View style={{height:"20%", backgroundColor: "green"}}/>
       </View>

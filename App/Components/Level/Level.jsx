@@ -5,11 +5,11 @@ import * as Progress from 'react-native-progress';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Level({ id, title, progress, reallyProgress, videoid, op }) {
+export default function Level({ id, title, progress, reallyProgress, videoid, op, gameType }) {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    navigation.navigate('VideoScreen', {levelId: id+1, videoid: Array.isArray(progress) ? (progress[0] < 100 ? videoid[0] : videoid[1]) : videoid , title: title, part: Array.isArray(progress) ? (progress[0] < 100 ? 1 : 2) : 0});
+    navigation.navigate('VideoScreen', {levelId: id+1, videoid: Array.isArray(progress) ? (progress[0] < 100 ? videoid[0] : videoid[1]) : videoid , title: title, part: Array.isArray(progress) ? (progress[0] < 100 ? 1 : 2) : 0, gameType: gameType});
   };
 
   const styles = StyleSheet.create({

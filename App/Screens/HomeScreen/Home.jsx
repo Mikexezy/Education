@@ -28,11 +28,12 @@ export default function Home() {
       const snapshot = await get(databaseRef);
       if (snapshot.exists()) {
         const data = snapshot.val();
-        const id = Object.keys(data).map((element, index) => ({
+        const id = Object.keys(data).map((element) => ({
           level: element,
           title: data[element].name,
-          progress: data[element].progress != undefined && data[element].progress != null ? data[element].progress : [data[element].Part1.progress, data[element].Part2.progress],
-          videoid: data[element].videoid != undefined && data[element].videoid != null ? data[element].videoid : [data[element].Part1.videoid, data[element].Part2.videoid]
+          progress: data[element].progress != undefined || data[element].progress != null ? data[element].progress : [data[element].Part1.progress, data[element].Part2.progress],
+          videoid: data[element].videoid != undefined || data[element].videoid != null ? data[element].videoid : [data[element].Part1.videoid, data[element].Part2.videoid],
+          gameType: data[element].game != undefined || data[element].game != null ? data[element].game.type : [data[element].Part1.game.type, data[element].Part2.game.type]
         }));
 
         id.sort((a, b) => parseInt(a.level.slice(3)) - parseInt(b.level.slice(3)));
@@ -84,6 +85,7 @@ export default function Home() {
               reallyProgress={Array.isArray(item.progress) ? ((item.progress[0] + item.progress[1])/2) : item.progress}
               videoid={item.videoid}
               op={index == 0 ? 1 : (levelData[index - 1].progress == 100 ? 1 : 0.5)}
+              gameType={item.gameType}
             />
           ))}
         </ScrollView>

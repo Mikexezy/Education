@@ -22,6 +22,7 @@ const nodesToAdd = {
     videoid: "LtjTWqS5F_0",
     progress: 0,
     game:{
+      type: "Cards",
       word1: "Educazione Finanziaria",
       word2: "Conoscenza"
     }
@@ -31,6 +32,7 @@ const nodesToAdd = {
     videoid: "U-RWlFzIcL4",
     progress: 0,
     game:{
+      type: "Cards",
       word1: "Banca",
       word2: "Investimenti",
       word3: "Economico-Sociale",
@@ -42,6 +44,7 @@ const nodesToAdd = {
     videoid: "wMUx4sOxcMM",
     progress: 0,
     game:{
+      type: "Cards",
       word1: "Inflazione",
       word2: "Deflazione"
     }
@@ -52,6 +55,7 @@ const nodesToAdd = {
       videoid: "V6Fr5jG8io0",
       progress: 0,
       game:{
+        type: "Cards",
         word1: "Carte Di Credito",
         word2: "Bonifico Bancario",
         word3: "Codice IBAN"
@@ -61,6 +65,7 @@ const nodesToAdd = {
       videoid: "WBjPHI8zj8k",
       progress: 0,
       game:{
+        type: "Cards",
         word1: "Contrassegno",
         word2: "Paypal",
         word3: "Carte Prepagate"
@@ -72,6 +77,7 @@ const nodesToAdd = {
     videoid: "TaoZbr_a6rI",
     progress: 0,
     game:{
+      type: "Related-Words",
       word1: "Clonazione",
       word2: "Phishing",
       word3: "Trashing",
@@ -83,6 +89,7 @@ const nodesToAdd = {
     videoid: "Tph8hC9iI_c",
     progress: 0,
     game:{
+      type: "Definition",
       word1: "Malware",
       definition: "Indica un qualsiasi programma informatico usato per disturbare le operazioni svolte da un utente di un computer"
     },
@@ -92,6 +99,7 @@ const nodesToAdd = {
     videoid: "mpXx4NLnYfQ",
     progress: 0,
     game:{
+      type: "Definition",
       word1: "Reddito",
       definition: "E' l'entrata netta, espressa in termini monetari, realizzata da un soggetto in un determinato periodo di tempo"
     }
@@ -101,6 +109,7 @@ const nodesToAdd = {
     videoid: "Ti7kT-bWeO4",
     progress: 0,
     game:{
+      type: "Definition",
       word1: "Tasse",
       definition: "Tipo di tributo, ovvero una somma di denaro dovuta allo Stato"
     }
@@ -110,6 +119,7 @@ const nodesToAdd = {
     videoid: "SdsWhAg6zBs",
     progress: 0,
     game:{
+      type: "Cards",
       word1: "Finanziamento",
       word2: "Beneficiario"
     }
@@ -119,6 +129,7 @@ const nodesToAdd = {
     videoid: "m6DXWBCK_qA",
     progress: 0,
     game:{
+      type: "Cards",
       word1: "Investimento",
       word2: "Budget"
     }
@@ -128,6 +139,7 @@ const nodesToAdd = {
     videoid: "PwaSQ7Bi9z4",
     progress: 0,
     game:{
+      type: "Cards",
       word1: "Assegno Bancario",
       word2: "Assegno Circolare"
     }
@@ -137,6 +149,7 @@ const nodesToAdd = {
     videoid: "luj58oO75Ec",
     progress: 0,
     game:{
+      type: "Cards",
       word1: "Mutuo",
       word2: "Prestiti",
       word3: "Mutuo Ipotecario",
@@ -149,6 +162,7 @@ const nodesToAdd = {
     videoid: "QT-iu1MTbUE",
     progress: 0,
     game:{
+      type: "Cards",
       word1: "Assicurazioni",
       word2: "Shock Finanziario"
     }
@@ -158,6 +172,7 @@ const nodesToAdd = {
     videoid: "6g0hW8HEXdU",
     progress: 0,
     game:{
+      type: "Cards",
       word1: "Moneta Digitale",
       word2: "Metodo Alternativo",
       word3: "Peer-To-Peer",
@@ -169,6 +184,7 @@ const nodesToAdd = {
     videoid: "0GBHxiZy67U",
     progress: 0,
     game:{
+      type: "Definition",
       word1: "Finanza Sostenibile",
       definition: "Applicazione di sviluppo sostenibile all'attività finanziaria. Garantisce la \"capacità di futuro\", cioè l'uso razionale delle risorse"
     }
