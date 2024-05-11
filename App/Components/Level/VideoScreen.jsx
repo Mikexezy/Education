@@ -78,7 +78,7 @@ export default function VideoScreen({ route }) {
       databaseRef = ref(db, 'users/'+userUid+"/Lvl"+route.params.levelId+"/progress");
     }
     set(databaseRef, 100);
-    navigation.goBack();
+    navigation.replace("Home");
   };
 
   const handleAnswerCorrect = (value) => {

@@ -1,15 +1,17 @@
-import { Text, StyleSheet, Platform, TouchableOpacity, View } from 'react-native';
+import { Text, StyleSheet, Platform, TouchableOpacity, View, Dimensions } from 'react-native';
 import React, { useEffect } from 'react';
 import { colors } from '../../../assets/Colors/Color';
-import * as Progress from 'react-native-progress';
+import CircularProgress from 'react-native-circular-progress-indicator';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+
+const {height, width} = Dimensions.get("window");
 
 export default function Level({ id, title, progress, reallyProgress, videoid, op, gameType }) {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    navigation.navigate('VideoScreen', {levelId: id+1, videoid: Array.isArray(progress) ? (progress[0] < 100 ? videoid[0] : videoid[1]) : videoid , title: title, part: Array.isArray(progress) ? (progress[0] < 100 ? 1 : 2) : 0, gameType: Array.isArray(gameType) ? (progress[0] < 100 ? gameType[0] : gameType[1]) : gameType});
+    navigation.replace('VideoScreen', {levelId: id+1, videoid: Array.isArray(progress) ? (progress[0] < 100 ? videoid[0] : videoid[1]) : videoid , title: title, part: Array.isArray(progress) ? (progress[0] < 100 ? 1 : 2) : 0, gameType: Array.isArray(gameType) ? (progress[0] < 100 ? gameType[0] : gameType[1]) : gameType});
   };
 
   const styles = StyleSheet.create({
@@ -82,7 +84,7 @@ export default function Level({ id, title, progress, reallyProgress, videoid, op
             <Text style={styles.titleStyle}> {title} </Text>
           </View>
           <View style={styles.object}>
-            <Progress.Circle showsText={true} textStyle={{fontFamily: "OutfitEB"}} progress={reallyProgress/100} size={70} color={reallyProgress < 100 ? "#22ba22" : colors.light}/>
+            <CircularProgress  maxValue={100} value={reallyProgress} radius={height*0.05} duration={1000} progressValueColor={reallyProgress < 100 ? "#22ba22" : colors.light} activeStrokeColor={reallyProgress < 100 ? "#22ba22" : colors.light} activeStrokeWidth={5} inActiveStrokeWidth={5} valueSuffix={"%"} valueSuffixStyle={{fontFamily:"OutfitEB"}}/>
           </View>
           <View style={styles.footer}>
             <TouchableOpacity style={styles.button} disabled={(reallyProgress == 100) ||  op != 1 ? true : false} onPress={handlePress}>

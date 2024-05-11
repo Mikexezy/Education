@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 
-export default function Related() {
+export default function Related({level, part, onAnswerCorrect}) {
   return (
     <View style={styles.container}>
       <Text>Related_Words</Text>
