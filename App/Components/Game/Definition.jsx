@@ -1,12 +1,15 @@
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Platform, TouchableOpacity, Vibration } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { db, auth } from '../../../firebaseConfig';
 import { get, ref } from 'firebase/database';
 
-export default function Definition({level, part}) {
+export default function Definition({level, part, onAnswerCorrect}) {
   const [definition, setDefinition] = useState("");
   const [wordsList, setWordsList] = useState([]);
   const [buttonId, setButtonId] = useState(0);
+  const [isCorrect, setIsCorrect] = useState(null);
+  const [correctAnswer, setCorrectAnswer] = useState("");
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -16,67 +19,71 @@ export default function Definition({level, part}) {
     return array;
   }
 
-  useEffect(() =>{
-    const fetchDefinition = async () => {
-      let word = [];
+  const fetchDefinition = async () => {
+    let word = [];
 
-      const currentUserUid = auth.currentUser.uid;
-      const dbRef = ref(db, "users/"+currentUserUid+"/Lvl"+level);
-      const snapshot = await get(dbRef);
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        if(data.game != null && data.game != undefined){
-          setDefinition(data.game.definition);
-          word.push(data.game.word1);
+    const currentUserUid = auth.currentUser.uid;
+    const dbRef = ref(db, "users/"+currentUserUid+"/Lvl"+level);
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      if(data.game != null && data.game != undefined){
+        setDefinition(data.game.definition);
+        word.push(data.game.word1);
+        setCorrectAnswer(data.game.word1);
+      }else{
+        if(part == 1){
+          setDefinition(data.Part1.game.definition);
+          word.push(data.Part1.game.word1);
+          setCorrectAnswer(data.Part1.game.word1);
         }else{
-          if(part == 1){
-            setDefinition(data.Part1.game.definition);
-            word.push(data.Part1.game.word1);
-          }else{
-            setDefinition(data.Part2.game.definition);
-            word.push(data.Part2.game.word1);
-          }
+          setDefinition(data.Part2.game.definition);
+          word.push(data.Part2.game.word1);
+          setCorrectAnswer(data.Part2.game.word1);
         }
-        const defaultPath = "users/"+currentUserUid+"/Lvl";
-        for (let i = 0; i < 3; i++) {
-          const seed = Math.floor(Math.random() * 1000);
-          let casualLevel = 0;
-        
-          while (casualLevel == level || casualLevel == 0) {
-            casualLevel = Math.floor(Math.random() * (15 - 1) + 1);
-          }
-        
-          let casualWordRef = ref(db, defaultPath + casualLevel);
-          const wordSnap = await get(casualWordRef);
-          const dat = wordSnap.val();
-          
-          if (dat.game != null && dat.game != undefined) {
-            for(element in word){
-              if(dat.game.word1 == element){
-                continue;
-              }
-            }
-            if(word.length < 4){
-              word.push(dat.game.word1);
-            }
-          }else{
-            for(element in word){
-              if(dat.Part1.game.word1 == element || dat.Part2.game.word1 == element){
-                continue;
-              }
-            }
-            if(word.length < 4){
-              word.push(dat.Part1.game.word1);
-            }
-            if(word.length < 4){
-              word.push(dat.Part2.game.word1);
-            }
-          }
-        }
-        const shuffledArray = shuffleArray(word);
-        setWordsList(shuffledArray);
       }
+      const defaultPath = "users/"+currentUserUid+"/Lvl";
+      for (let i = 0; i < 3; i++) {
+        const seed = Math.floor(Math.random() * 1000);
+        let casualLevel = 0;
+      
+        while (casualLevel == level || casualLevel == 0) {
+          casualLevel = Math.floor(Math.random() * (15 - 1) + 1);
+        }
+      
+        let casualWordRef = ref(db, defaultPath + casualLevel);
+        const wordSnap = await get(casualWordRef);
+        const dat = wordSnap.val();
+        
+        if (dat.game != null && dat.game != undefined) {
+          for(element in word){
+            if(dat.game.word1 == element){
+              continue;
+            }
+          }
+          if(word.length < 4){
+            word.push(dat.game.word1);
+          }
+        }else{
+          for(element in word){
+            if(dat.Part1.game.word1 == element || dat.Part2.game.word1 == element){
+              continue;
+            }
+          }
+          if(word.length < 4){
+            word.push(dat.Part1.game.word1);
+          }
+          if(word.length < 4){
+            word.push(dat.Part2.game.word1);
+          }
+        }
+      }
+      const shuffledArray = shuffleArray(word);
+      setWordsList(shuffledArray);
     }
+  }
+
+  useEffect(() =>{
     fetchDefinition();
   }, []);
 
@@ -90,9 +97,47 @@ export default function Definition({level, part}) {
     { id: 4, text: wordsList[3] }
   ] : [];
 
-  function buttonPressed(id){
+  function buttonPressed(id) {
+    setButtonDisabled(true);
+    let correct = false;
+  
+    for (let i = 0; i < 2; i++) {
+      if (row1[i].id === id && row1[i].text === correctAnswer) {
+        correct = true;
+        break;
+      }
+    }
+  
+    if (!correct) {
+      for (let i = 0; i < 2; i++) {
+        if (row2[i].id === id && row2[i].text === correctAnswer) {
+          correct = true;
+          break;
+        }
+      }
+    }
+  
+    setIsCorrect(correct);
+    onAnswerCorrect(correct);
     setButtonId(id);
-  };
+  
+    if (!correct) {
+      Vibration.vibrate(100);
+      setTimeout(() => {
+        fetchDefinition();
+        setTimeout(() => {
+          setButtonId(0);
+          setButtonDisabled(false);
+        }, 900);
+      }, 500);
+    }
+  }
+
+  const functStyles = StyleSheet.create({
+    button:{
+      backgroundColor: isCorrect == true ? "green" : "red"
+    }
+  });
   
   return (
     <View style={styles.container}>
@@ -102,16 +147,16 @@ export default function Definition({level, part}) {
 
       <View style={styles.answerContainer}>
         <View style={styles.rowContainer}>
-          {row1.map((button, index) => (
-            <TouchableOpacity key={button.id} style={[styles.button, buttonId == button.id ? styles.functStyles : null]} onPress={() => buttonPressed(button.id)}>
+          {row1.map((button) => (
+            <TouchableOpacity key={button.id} style={[styles.button, buttonId == button.id ? functStyles.button : null]} onPress={() => buttonPressed(button.id)} disabled={buttonDisabled? true : false}>
               <Text style={styles.answerText}>{button.text}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
         <View style={styles.rowContainer}>
-          {row2.map((button, index) => (
-            <TouchableOpacity key={button.id} style={[styles.button, buttonId == button.id ? styles.functStyles : null]} onPress={() => buttonPressed(button.id)}>
+          {row2.map((button) => (
+            <TouchableOpacity key={button.id} style={[styles.button, buttonId == button.id ? functStyles.button : null]} onPress={() => buttonPressed(button.id)} disabled={buttonDisabled? true : false}>
               <Text style={styles.answerText}>{button.text}</Text>
             </TouchableOpacity>
           ))}
@@ -184,7 +229,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center"
   },
-  functStyles:{
-    backgroundColor: "green"
-  }
 });

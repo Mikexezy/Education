@@ -1,4 +1,4 @@
-import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { colors } from '../../../assets/Colors/Color';
@@ -9,6 +9,8 @@ import Definition from '../Game/Definition';
 import Related from '../Game/Related_Words';
 import { useNavigation } from '@react-navigation/native';
 
+import { Feather, FontAwesome } from '@expo/vector-icons';
+
 const{width, height} = Dimensions.get("window");
 
 export default function VideoScreen({ route }) {
@@ -16,6 +18,9 @@ export default function VideoScreen({ route }) {
 
   const[videoEnd, setVideoEnd] = useState(false);
   const[video_state, setvideo_state] = useState(true);
+  const[answerCorrect, setAnswerCorrect] = useState(false);
+
+  const [noAnswer, setNoAnswer] = useState(true);
 
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
@@ -77,6 +82,27 @@ export default function VideoScreen({ route }) {
     navigation.goBack();
   };
 
+  const handleAnswerCorrect = (value) => {
+    setNoAnswer(false);
+    setAnswerCorrect(value);
+  };
+
+  const funcStyle = StyleSheet.create({
+    shadow:{
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.5,
+          shadowRadius: 3,
+        },
+        android: {
+          elevation: 5,
+        },
+      }),
+    }
+  })
+
   return (
     <View style={styles.container}>
       <YoutubePlayer
@@ -88,11 +114,14 @@ export default function VideoScreen({ route }) {
       />
       <View style={{flex:1, backgroundColor: "transparent", paddingHorizontal: 0.05 * width, flexDirection:"column", justifyContent:"space-around"}}>
         <View style={{height:0.4 * height, backgroundColor: "transparent"}}>
-          {videoEnd == true ? (route.params.gameType == "Cards" ? <Cards level={route.params.levelId} part={route.params.part}/> : (route.params.gameType == "Definition" ? <Definition level={route.params.levelId} part={route.params.part}/> : (route.params.gameType == "Related-Words" ? <Related level={route.params.levelId} part={route.params.part}/> : null))) : null}
+          {videoEnd == true ? (route.params.gameType == "Cards" ? <Cards level={route.params.levelId} part={route.params.part}/> : (route.params.gameType == "Definition" ? <Definition level={route.params.levelId} part={route.params.part} onAnswerCorrect={handleAnswerCorrect}/> : (route.params.gameType == "Related-Words" ? <Related level={route.params.levelId} part={route.params.part}/> : null))) : null}
         </View>
         <View style={{height:"20%", backgroundColor: "transparent", alignItems:"center", justifyContent:"center"}}>
-          <TouchableOpacity style={{height: height*0.12, width:height*0.12, backgroundColor:"green", borderRadius:(height*0.13)/2}} onPress={completeLevel}>
-
+          <TouchableOpacity style={[{height: height*0.12, width:height*0.12, backgroundColor:answerCorrect == true ? "green" : (noAnswer == true ? "white" : "red"), borderRadius:(height*0.13)/2, opacity: answerCorrect == true ? 1 : 0.5, justifyContent: "center", alignItems:"center"}, funcStyle.shadow]} disabled={!answerCorrect} onPress={completeLevel}>
+            {answerCorrect == true ? 
+              <Feather name="check" size={45} color="white" />:
+              (noAnswer == true ? <FontAwesome name="hand-pointer-o" size={45} color="black" /> : <Feather name="x" size={45} color="white" />)
+            }
           </TouchableOpacity>
         </View>
       </View>
