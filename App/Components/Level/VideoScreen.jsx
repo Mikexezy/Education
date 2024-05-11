@@ -54,7 +54,6 @@ export default function VideoScreen({ route }) {
     }
 
     const snapshot = await get(databaseRef);
-
     if(snapshot.exists()){
       const data = snapshot.val();
       if(data.progress == 50){
