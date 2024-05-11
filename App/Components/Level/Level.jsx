@@ -9,7 +9,7 @@ export default function Level({ id, title, progress, reallyProgress, videoid, op
   const navigation = useNavigation();
 
   const handlePress = () => {
-    navigation.navigate('VideoScreen', {levelId: id+1, videoid: Array.isArray(progress) ? (progress[0] < 100 ? videoid[0] : videoid[1]) : videoid , title: title, part: Array.isArray(progress) ? (progress[0] < 100 ? 1 : 2) : 0, gameType: gameType});
+    navigation.navigate('VideoScreen', {levelId: id+1, videoid: Array.isArray(progress) ? (progress[0] < 100 ? videoid[0] : videoid[1]) : videoid , title: title, part: Array.isArray(progress) ? (progress[0] < 100 ? 1 : 2) : 0, gameType: Array.isArray(gameType) ? (progress[0] < 100 ? gameType[0] : gameType[1]) : gameType});
   };
 
   const styles = StyleSheet.create({

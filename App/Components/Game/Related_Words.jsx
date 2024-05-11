@@ -4,7 +4,7 @@ import React from 'react'
 export default function Related() {
   return (
     <View style={styles.container}>
-      <Text>Definition</Text>
+      <Text>Related_Words</Text>
     </View>
   )
 };

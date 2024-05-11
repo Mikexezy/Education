@@ -84,7 +84,7 @@ export default function Home() {
               progress={item.progress}
               reallyProgress={Array.isArray(item.progress) ? ((item.progress[0] + item.progress[1])/2) : item.progress}
               videoid={item.videoid}
-              op={index == 0 ? 1 : (levelData[index - 1].progress == 100 ? 1 : 0.5)}
+              op={index == 0 ? 1 : (Array.isArray(levelData[index - 1].progress) ? (((levelData[index-1].progress[0] + levelData[index-1].progress[1])/2) == 100 ? 1 : 0.5) : (levelData[index-1].progress == 100 ? 1 : 0.5))}
               gameType={item.gameType}
             />
           ))}
