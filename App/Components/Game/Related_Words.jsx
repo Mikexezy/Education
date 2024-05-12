@@ -99,10 +99,8 @@ export default function Related({ level, part, onAnswerCorrect }) {
   }, []);
 
   useEffect(() => {
-    console.log(correct.length, correctWord.length, wrong.length, keyPressed)
     if(correct.length == correctWord.length && correct.length != 0 && wrong.length == 0){
       onAnswerCorrect(true);
-      console.log("ciao");
     }else if(!keyPressed){
     }else{
       onAnswerCorrect(false);

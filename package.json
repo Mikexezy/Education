@@ -29,12 +29,14 @@
     "react-native-reanimated": "~3.6.2",
     "react-native-video": "^5.2.1",
     "react-native-web": "~0.19.6",
+    "react-native-web-webview": "^1.0.2",
     "react-native-webview": "13.6.4",
     "react-native-youtube-iframe": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@types/react-native-video": "^5.0.20"
+    "@types/react-native-video": "^5.0.20",
+    "babel-preset-expo": "^11.0.5"
   },
   "private": true
 }
