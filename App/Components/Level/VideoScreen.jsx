@@ -113,10 +113,10 @@ export default function VideoScreen({ route }) {
       />
       <View style={{flex:1, backgroundColor: "transparent", paddingHorizontal: 0.05 * width, flexDirection:"column", justifyContent:"space-around"}}>
         <View style={{height:0.4 * height, backgroundColor: "transparent"}}>
-          {videoEnd == true ? (route.params.gameType == "Cards" ? <Cards level={route.params.levelId} part={route.params.part}/> : (route.params.gameType == "Definition" ? <Definition level={route.params.levelId} part={route.params.part} onAnswerCorrect={handleAnswerCorrect}/> : (route.params.gameType == "Related-Words" ? <Related level={route.params.levelId} part={route.params.part}/> : null))) : null}
+          {videoEnd == true ? (route.params.gameType == "Cards" ? <Cards level={route.params.levelId} part={route.params.part} onAnswerCorrect={handleAnswerCorrect}/> : (route.params.gameType == "Definition" ? <Definition level={route.params.levelId} part={route.params.part} onAnswerCorrect={handleAnswerCorrect}/> : (route.params.gameType == "Related-Words" ? <Related level={route.params.levelId} part={route.params.part} onAnswerCorrect={handleAnswerCorrect}/> : null))) : null}
         </View>
         <View style={{height:"20%", backgroundColor: "transparent", alignItems:"center", justifyContent:"center"}}>
-          <TouchableOpacity style={[{height: height*0.12, width:height*0.12, backgroundColor:answerCorrect == true ? "green" : (noAnswer == true ? "white" : "red"), borderRadius:(height*0.13)/2, opacity: answerCorrect == true ? 1 : 0.5, justifyContent: "center", alignItems:"center"}, funcStyle.shadow]} disabled={!answerCorrect} onPress={completeLevel}>
+          <TouchableOpacity style={[funcStyle.shadow, {height: height*0.12, width:height*0.12, backgroundColor:answerCorrect == true ? "green" : (noAnswer == true ? "white" : "red"), borderRadius:(height*0.13)/2, opacity: answerCorrect == true ? 1 : 0.5, justifyContent: "center", alignItems:"center"}]} disabled={!answerCorrect} onPress={completeLevel}>
             {answerCorrect == true ? 
               <Feather name="check" size={45} color="white" />:
               (noAnswer == true ? <FontAwesome name="hand-pointer-o" size={45} color="black" /> : <Feather name="x" size={45} color="white" />)
