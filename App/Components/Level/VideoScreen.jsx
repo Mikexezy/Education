@@ -1,4 +1,4 @@
-import { View, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableOpacity, Platform, BackHandler, Alert } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { colors } from '../../../assets/Colors/Color';
@@ -10,6 +10,7 @@ import Related from '../Game/Related_Words';
 import { useNavigation } from '@react-navigation/native';
 
 import { Feather, FontAwesome } from '@expo/vector-icons';
+import PopUp from '../PopUp/PopUp';
 
 const{width, height} = Dimensions.get("window");
 
@@ -21,6 +22,22 @@ export default function VideoScreen({ route }) {
   const[answerCorrect, setAnswerCorrect] = useState(false);
 
   const [noAnswer, setNoAnswer] = useState(true);
+  
+  const[popUpVisible, setPopUpVisibile] = useState(false);
+
+  useEffect(() => {
+    const backAction = () => {
+        setPopUpVisibile(true);
+        return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction
+    );
+
+    return () => backHandler.remove();
+}, []);
 
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
@@ -102,8 +119,13 @@ export default function VideoScreen({ route }) {
     }
   })
 
+  function onClose(){
+    setPopUpVisibile(false);
+  }
+
   return (
     <View style={styles.container}>
+      <PopUp visible={popUpVisible} onClose={onClose}/>
       <YoutubePlayer
         height={210}
         play={video_state}
