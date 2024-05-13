@@ -243,17 +243,14 @@ export default function Cards({ level, part, onAnswerCorrect }) {
                 <Animated.View
                   key={card.id}
                   style={[
-                    styles.cardBox,
+                    funcStyles.cardBox,
                     funcStyles.shadow, 
-                    correct.includes(card.id) ? funcStyles.correctPair : null,
-                    wrong.includes(card.id) ? funcStyles.wrongPair : null,
-                    selected.includes(card.id) ? funcStyles.selected : null,
-                    {
-                      transform: [
-                        { perspective: 1000 },
-                        { rotateY: cardRotation.interpolate({ inputRange: [0, 180], outputRange: ['0deg', '180deg'] }) }
-                      ]
-                    }
+                    correct.includes(card.id) ? (funcStyles.correctPair) : null,
+                    wrong.includes(card.id) ? (funcStyles.wrongPair) : null,
+                    selected.includes(card.id) ? (funcStyles.selected) : {transform: [
+                      { perspective: 1000 },
+                      { rotateY: "180deg" }
+                    ]}
                   ]}
                 >
                   <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
@@ -296,17 +293,14 @@ export default function Cards({ level, part, onAnswerCorrect }) {
                 <Animated.View
                   key={card.id}
                   style={[
-                    styles.cardBox,
+                    funcStyles.cardBox,
                     funcStyles.shadow, 
-                    correct.includes(card.id) ? funcStyles.correctPair : null,
-                    wrong.includes(card.id) ? funcStyles.wrongPair : null,
-                    selected.includes(card.id) ? funcStyles.selected : null,
-                    {
-                      transform: [
-                        { perspective: 1000 },
-                        { rotateY: cardRotation.interpolate({ inputRange: [0, 180], outputRange: ['0deg', '180deg'] }) }
-                      ]
-                    }
+                    correct.includes(card.id) ? (funcStyles.correctPair) : null,
+                    wrong.includes(card.id) ? (funcStyles.wrongPair) : null,
+                    selected.includes(card.id) ? (funcStyles.selected) : {transform: [
+                      { perspective: 1000 },
+                      { rotateY: "180deg" }
+                    ]}
                   ]}
                 >
                   <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
