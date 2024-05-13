@@ -11,9 +11,12 @@ export default function Cards({ level, part, onAnswerCorrect }) {
     const [wrong, setWrong] = useState([]);
     const [selected, setSelected] = useState([]);
     
-    const [isFlipped, setIsFlipped] = useState(true);
+    const [isFlipped1, setIsFlipped1] = useState(true);
+    const [isFlipped2, setIsFlipped2] = useState(true);
+    let [cardRotation1] = useState(new Animated.Value(180));
+    let [cardRotation2] = useState(new Animated.Value(180));
 
-    const [cardRotation] = useState(new Animated.Value(0));
+    let word1, word2;
 
     async function fetchWord(){
       let word = [];
@@ -101,19 +104,10 @@ export default function Cards({ level, part, onAnswerCorrect }) {
 
     const funcStyles = StyleSheet.create({
       shadow: {
-        ...Platform.select({
-          ios: {
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.5,
-            shadowRadius: 3,
-          },
-          android: {
-            elevation: 5,
-          },
-        }),
+        elevation: 5
       },
       correctPair:{
+        elevation: 5,
         backgroundColor: 'green',
         transform: [
           { perspective: 1000 },
@@ -121,41 +115,37 @@ export default function Cards({ level, part, onAnswerCorrect }) {
         ]
       },
       wrongPair: {
+        elevation: 5,
         backgroundColor: 'red',
         transform: [
           { perspective: 1000 },
           { rotateY: "0deg" }
         ]
       },
-      selected:{
+      selected1:{
         opacity: 0.5,
         transform: [
           { perspective: 1000 },
-          { rotateY: cardRotation.interpolate({ inputRange: [0, 180], outputRange: ['0deg', '180deg'] }) }
+          { rotateY: cardRotation1.interpolate({ inputRange: [0, 180], outputRange: ['0deg', '180deg'] }) }
         ]
       },
-      cardBox:{
-        height:"50",
-        width:"23%",
-        backgroundColor: "white",
-        alignItems:"center",
-        justifyContent:"center",
-        borderRadius: 10,
-        padding: 5,
-      }
+      selected2:{
+        opacity: 0.5,
+        transform: [
+          { perspective: 1000 },
+          { rotateY: cardRotation2.interpolate({ inputRange: [0, 180], outputRange: ['0deg', '180deg'] }) }
+        ]
+      },
     });
 
     function selectCard(id){
       if (selected.length < 2) {
         setSelected([...selected, id]);
-        flipCard();
       }
     }
 
     useEffect(() => {
-      console.log(selected);
       if(selected.length == 2){
-        let word1, word2;
           for(let i=0; i<row1.length; i++){
             if(row1[i] != null){
               if (row1[i].id == selected[0]) {
@@ -186,13 +176,9 @@ export default function Cards({ level, part, onAnswerCorrect }) {
               }
             }
           }
-        if(word1 == word2){
-          setCorrect([...correct, ...selected]);
-        }else{
-          setWrong([...wrong, ...selected]);
-          Vibration.vibrate(100);
-        }
-        setSelected([]);
+      }
+      if(selected.length > 0){
+        flipCard();
       }
     }, [selected])
 
@@ -214,20 +200,37 @@ export default function Cards({ level, part, onAnswerCorrect }) {
     }, [wrong]);
 
     const flipCard = () => {
-      setIsFlipped(!isFlipped);
-      Animated.timing(cardRotation, {
-        toValue: isFlipped ? 180 : 0,
+      if(selected.length == 1){
+        Animated.timing(cardRotation1, {
+        toValue: isFlipped1 == true ? 0 : 180,
         duration: 500,
         easing: Easing.linear,
         useNativeDriver: true,
-      }).start(() => {
-        setIsFlipped(true);
-      });
+        }).start(() => {
+          setIsFlipped1(!isFlipped1);
+        });
+      }else{
+        Animated.timing(cardRotation2, {
+          toValue: isFlipped2 == true ? 0 : 180,
+          duration: 500,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }).start(() => {
+          if(word1 == word2){
+            setCorrect([...correct, ...selected]);
+          }else{
+            setWrong([...wrong, ...selected]);
+            Vibration.vibrate(100);
+          }
+          setIsFlipped1(true);
+          setIsFlipped2(true);
+          cardRotation1.setValue(180);
+          cardRotation2.setValue(180);
+          console.log(cardRotation1, cardRotation2);
+          setSelected([]);
+        });
+      }
     };
-
-    useEffect(() => {
-      console.log(isFlipped);
-    }, [isFlipped]);
 
     return (
         <View style={styles.container}>
@@ -238,44 +241,18 @@ export default function Cards({ level, part, onAnswerCorrect }) {
           </View>
           <View style={styles.cardContainer}>
             <View style={styles.rowContainer}>
-            {row2.map((card) => (
-                card &&
-                <Animated.View
-                  key={card.id}
-                  style={[
-                    funcStyles.cardBox,
-                    funcStyles.shadow, 
-                    correct.includes(card.id) ? (funcStyles.correctPair) : null,
-                    wrong.includes(card.id) ? (funcStyles.wrongPair) : null,
-                    selected.includes(card.id) ? (funcStyles.selected) : {transform: [
-                      { perspective: 1000 },
-                      { rotateY: "180deg" }
-                    ]}
-                  ]}
-                >
-                  <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
-                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
-                        {card.text}
-                      </Text>
-                  </TouchableOpacity>
-                </Animated.View>
-              ))}
-            </View>
-
-            <View style={styles.rowContainer}>
               {row1.map((card) => (
                 card &&
                 <Animated.View
                   key={card.id}
                   style={[
-                    funcStyles.cardBox,
-                    funcStyles.shadow, 
+                    styles.cardBox, 
                     correct.includes(card.id) ? (funcStyles.correctPair) : null,
                     wrong.includes(card.id) ? (funcStyles.wrongPair) : null,
-                    selected.includes(card.id) ? (funcStyles.selected) : {transform: [
+                    selected.includes(card.id) ? (selected.indexOf(card.id) == 0 ? funcStyles.selected1 : (selected.indexOf(card.id) == 1 ? funcStyles.selected2 : null)) : (correct.includes(card.id) ? null : (wrong.includes(card.id) ? null : {transform: [
                       { perspective: 1000 },
                       { rotateY: "180deg" }
-                    ]}
+                    ]},funcStyles.shadow))
                   ]}
                 >
                   <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
@@ -288,19 +265,42 @@ export default function Cards({ level, part, onAnswerCorrect }) {
             </View>
 
             <View style={styles.rowContainer}>
-            {row3.map((card) => (
+              {row2.map((card) => (
                 card &&
                 <Animated.View
                   key={card.id}
                   style={[
-                    funcStyles.cardBox,
-                    funcStyles.shadow, 
+                    styles.cardBox, 
                     correct.includes(card.id) ? (funcStyles.correctPair) : null,
                     wrong.includes(card.id) ? (funcStyles.wrongPair) : null,
-                    selected.includes(card.id) ? (funcStyles.selected) : {transform: [
+                    selected.includes(card.id) ? (selected.indexOf(card.id) == 0 ? funcStyles.selected1 : (selected.indexOf(card.id) == 1 ? funcStyles.selected2 : null)) : (correct.includes(card.id) ? null : (wrong.includes(card.id) ? null : {transform: [
                       { perspective: 1000 },
                       { rotateY: "180deg" }
-                    ]}
+                    ]},funcStyles.shadow))
+                  ]}
+                >
+                  <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
+                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
+                        {card.text}
+                      </Text>
+                  </TouchableOpacity>
+                </Animated.View>
+              ))}
+            </View>
+
+            <View style={styles.rowContainer}>
+              {row3.map((card) => (
+                card &&
+                <Animated.View
+                  key={card.id}
+                  style={[
+                    styles.cardBox, 
+                    correct.includes(card.id) ? (funcStyles.correctPair) : null,
+                    wrong.includes(card.id) ? (funcStyles.wrongPair) : null,
+                    selected.includes(card.id) ? (selected.indexOf(card.id) == 0 ? funcStyles.selected1 : (selected.indexOf(card.id) == 1 ? funcStyles.selected2 : null)) : (correct.includes(card.id) ? null : (wrong.includes(card.id) ? null : {transform: [
+                      { perspective: 1000 },
+                      { rotateY: "180deg" }
+                    ]},funcStyles.shadow))
                   ]}
                 >
                   <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
@@ -360,5 +360,14 @@ export default function Cards({ level, part, onAnswerCorrect }) {
         fontFamily: "OutfitM",
         textAlign:"center",
         textAlignVertical:"center",
+      },
+      cardBox:{
+        height:"90%",
+        width:"23%",
+        backgroundColor: "white",
+        alignItems:"center",
+        justifyContent:"center",
+        borderRadius: 10,
+        padding: 5,
       }
     });
