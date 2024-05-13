@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Vibration } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Vibration, Animated, Easing } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { db, auth } from '../../../firebaseConfig';
 import { get, ref } from 'firebase/database';
@@ -10,6 +10,10 @@ export default function Cards({ level, part, onAnswerCorrect }) {
     const [correct, setCorrect] = useState([]);
     const [wrong, setWrong] = useState([]);
     const [selected, setSelected] = useState([]);
+    
+    const [isFlipped, setIsFlipped] = useState(true);
+
+    const [cardRotation] = useState(new Animated.Value(0));
 
     async function fetchWord(){
       let word = [];
@@ -110,19 +114,41 @@ export default function Cards({ level, part, onAnswerCorrect }) {
         }),
       },
       correctPair:{
-        backgroundColor: 'green'
+        backgroundColor: 'green',
+        transform: [
+          { perspective: 1000 },
+          { rotateY: "0deg" }
+        ]
       },
       wrongPair: {
-        backgroundColor: 'red'
+        backgroundColor: 'red',
+        transform: [
+          { perspective: 1000 },
+          { rotateY: "0deg" }
+        ]
       },
       selected:{
-        opacity: 0.5
+        opacity: 0.5,
+        transform: [
+          { perspective: 1000 },
+          { rotateY: cardRotation.interpolate({ inputRange: [0, 180], outputRange: ['0deg', '180deg'] }) }
+        ]
+      },
+      cardBox:{
+        height:"50",
+        width:"23%",
+        backgroundColor: "white",
+        alignItems:"center",
+        justifyContent:"center",
+        borderRadius: 10,
+        padding: 5,
       }
     });
 
     function selectCard(id){
       if (selected.length < 2) {
         setSelected([...selected, id]);
+        flipCard();
       }
     }
 
@@ -138,7 +164,6 @@ export default function Cards({ level, part, onAnswerCorrect }) {
               if (row1[i].id == selected[1]) {
                 word2 = row1[i].text;
               }
-              console.log(row1[i]);
             }
           }
           for(let i=0; i<row2.length; i++){
@@ -181,13 +206,28 @@ export default function Cards({ level, part, onAnswerCorrect }) {
     }, [correct]);
 
     useEffect(() => {
-      console.log(wrong);
       if (wrong.length > 0) {
         setTimeout(() => {
           setWrong([]);
         }, 500);
       }
     }, [wrong]);
+
+    const flipCard = () => {
+      setIsFlipped(!isFlipped);
+      Animated.timing(cardRotation, {
+        toValue: isFlipped ? 180 : 0,
+        duration: 500,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }).start(() => {
+        setIsFlipped(true);
+      });
+    };
+
+    useEffect(() => {
+      console.log(isFlipped);
+    }, [isFlipped]);
 
     return (
         <View style={styles.container}>
@@ -198,35 +238,83 @@ export default function Cards({ level, part, onAnswerCorrect }) {
           </View>
           <View style={styles.cardContainer}>
             <View style={styles.rowContainer}>
-              {row2.map((card) => (
+            {row2.map((card) => (
                 card &&
-                <TouchableOpacity style={[styles.cardBox, funcStyles.shadow, correct.includes(card.id) ? funcStyles.correctPair : null, wrong.includes(card.id) ? funcStyles.wrongPair : null, selected.includes(card.id) ? funcStyles.selected : null]} key={card.id} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
-                  <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
-                    {card.text}
-                  </Text>
-                </TouchableOpacity>
+                <Animated.View
+                  key={card.id}
+                  style={[
+                    styles.cardBox,
+                    funcStyles.shadow, 
+                    correct.includes(card.id) ? funcStyles.correctPair : null,
+                    wrong.includes(card.id) ? funcStyles.wrongPair : null,
+                    selected.includes(card.id) ? funcStyles.selected : null,
+                    {
+                      transform: [
+                        { perspective: 1000 },
+                        { rotateY: cardRotation.interpolate({ inputRange: [0, 180], outputRange: ['0deg', '180deg'] }) }
+                      ]
+                    }
+                  ]}
+                >
+                  <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
+                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
+                        {card.text}
+                      </Text>
+                  </TouchableOpacity>
+                </Animated.View>
               ))}
             </View>
 
             <View style={styles.rowContainer}>
               {row1.map((card) => (
                 card &&
-                <TouchableOpacity style={[styles.cardBox, funcStyles.shadow, correct.includes(card.id) ? funcStyles.correctPair : null, wrong.includes(card.id) ? funcStyles.wrongPair : null, selected.includes(card.id) ? funcStyles.selected : null]} key={card.id} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
-                  <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
-                    {card.text}
-                  </Text>
-                </TouchableOpacity>
+                <Animated.View
+                  key={card.id}
+                  style={[
+                    funcStyles.cardBox,
+                    funcStyles.shadow, 
+                    correct.includes(card.id) ? (funcStyles.correctPair) : null,
+                    wrong.includes(card.id) ? (funcStyles.wrongPair) : null,
+                    selected.includes(card.id) ? (funcStyles.selected) : {transform: [
+                      { perspective: 1000 },
+                      { rotateY: "180deg" }
+                    ]}
+                  ]}
+                >
+                  <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
+                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
+                        {card.text}
+                      </Text>
+                  </TouchableOpacity>
+                </Animated.View>
               ))}
             </View>
 
             <View style={styles.rowContainer}>
-              {row3.map((card) => (
+            {row3.map((card) => (
                 card &&
-                <TouchableOpacity style={[styles.cardBox, funcStyles.shadow, correct.includes(card.id) ? funcStyles.correctPair : null, wrong.includes(card.id) ? funcStyles.wrongPair : null, selected.includes(card.id) ? funcStyles.selected : null]} key={card.id} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
-                  <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
-                    {card.text}
-                  </Text>
-                </TouchableOpacity>
+                <Animated.View
+                  key={card.id}
+                  style={[
+                    styles.cardBox,
+                    funcStyles.shadow, 
+                    correct.includes(card.id) ? funcStyles.correctPair : null,
+                    wrong.includes(card.id) ? funcStyles.wrongPair : null,
+                    selected.includes(card.id) ? funcStyles.selected : null,
+                    {
+                      transform: [
+                        { perspective: 1000 },
+                        { rotateY: cardRotation.interpolate({ inputRange: [0, 180], outputRange: ['0deg', '180deg'] }) }
+                      ]
+                    }
+                  ]}
+                >
+                  <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
+                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
+                        {card.text}
+                      </Text>
+                  </TouchableOpacity>
+                </Animated.View>
               ))}
             </View>
           </View>
@@ -270,15 +358,6 @@ export default function Cards({ level, part, onAnswerCorrect }) {
         height:"33%",
         flexDirection:"row",
         justifyContent:"space-evenly"
-      },
-      cardBox:{
-        height:"90%",
-        width:"23%",
-        backgroundColor: "white",
-        alignItems:"center",
-        justifyContent:"center",
-        borderRadius: 10,
-        padding: 5
       },
       cardText:{
         flex:1,
