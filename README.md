@@ -3,7 +3,7 @@
   <img src="https://github.com/Mikexezy/Education/blob/master/headerLogo.png" alt="€DUCATION"/>
 </picture>
 
-<div style="border: 50px solid black;"> <img src="https://github.com/Mikexezy/Education/blob/master/2photo.png" alt="App Preview" class="rounded"/> </div>
+<img src="https://github.com/Mikexezy/Education/blob/master/2photo.png" alt="App Preview" class="rounded"/>
 
 ## Descrizione
 PWA realizzata insieme alla classe terza dell'istituto A. Manzoni di Caltanissetta
