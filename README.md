@@ -1,6 +1,7 @@
 <style>
   .rounded{
     border-radius: 10px; 
+  }
 </style>
 
 <picture>
