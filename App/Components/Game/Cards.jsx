@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Vibration, Animated, Easing } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Vibration, Animated, Easing, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { db, auth } from '../../../firebaseConfig';
 import { get, ref } from 'firebase/database';
@@ -252,13 +252,18 @@ export default function Cards({ level, part, onAnswerCorrect }) {
                     selected.includes(card.id) ? (selected.indexOf(card.id) == 0 ? funcStyles.selected1 : (selected.indexOf(card.id) == 1 ? funcStyles.selected2 : null)) : (correct.includes(card.id) ? null : (wrong.includes(card.id) ? null : {transform: [
                       { perspective: 1000 },
                       { rotateY: "180deg" }
-                    ]},funcStyles.shadow))
+                    ], elevation: 5}))
                   ]}
                 >
-                  <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
-                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
+                  <TouchableOpacity style={{height:"100%", width:"100%", alignItems:"center", justifyContent:"center"}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
+                    <View style={[{height: "100%", width:"100%", backgroundColor: "white", position:"absolute", zIndex: 10, alignItems:"center", justifyContent:"center"}, correct.includes(card.id) ? {opacity: 0} : (wrong.includes(card.id) ? {opacity: 0} : null)]}>
+                      <Image source={require('../../../assets/headerLogo.png')} style={[{width:"70%", resizeMode:"contain", transform:[{perspective: 1000}, {rotateY: "180deg"}]}, selected.includes(card.id) ? {opacity:0} : null]}/>
+                    </View>  
+                    <View style={{height:"100%", width:"100%", padding: 5}}>
+                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={[styles.cardText]}>
                         {card.text}
                       </Text>
+                    </View>
                   </TouchableOpacity>
                 </Animated.View>
               ))}
@@ -276,13 +281,18 @@ export default function Cards({ level, part, onAnswerCorrect }) {
                     selected.includes(card.id) ? (selected.indexOf(card.id) == 0 ? funcStyles.selected1 : (selected.indexOf(card.id) == 1 ? funcStyles.selected2 : null)) : (correct.includes(card.id) ? null : (wrong.includes(card.id) ? null : {transform: [
                       { perspective: 1000 },
                       { rotateY: "180deg" }
-                    ]},funcStyles.shadow))
+                    ], elevation: 5}))
                   ]}
                 >
-                  <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
-                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
+                  <TouchableOpacity style={{height:"100%", width:"100%", alignItems:"center", justifyContent:"center"}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
+                    <View style={[{height: "100%", width:"100%", backgroundColor: "white", position:"absolute", zIndex: 10, alignItems:"center", justifyContent:"center"}, correct.includes(card.id) ? {opacity: 0} : (wrong.includes(card.id) ? {opacity: 0} : null)]}>
+                      <Image source={require('../../../assets/headerLogo.png')} style={[{width:"70%", resizeMode:"contain", transform:[{perspective: 1000}, {rotateY: "180deg"}]}, selected.includes(card.id) ? {opacity:0} : null]}/>
+                    </View>  
+                    <View style={{height:"100%", width:"100%", padding: 5}}>
+                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={[styles.cardText]}>
                         {card.text}
                       </Text>
+                    </View>
                   </TouchableOpacity>
                 </Animated.View>
               ))}
@@ -300,13 +310,18 @@ export default function Cards({ level, part, onAnswerCorrect }) {
                     selected.includes(card.id) ? (selected.indexOf(card.id) == 0 ? funcStyles.selected1 : (selected.indexOf(card.id) == 1 ? funcStyles.selected2 : null)) : (correct.includes(card.id) ? null : (wrong.includes(card.id) ? null : {transform: [
                       { perspective: 1000 },
                       { rotateY: "180deg" }
-                    ]},funcStyles.shadow))
+                    ], elevation: 5}))
                   ]}
                 >
-                  <TouchableOpacity style={{flex: 1}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
-                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.cardText}>
+                  <TouchableOpacity style={{height:"100%", width:"100%", alignItems:"center", justifyContent:"center"}} onPress={() => selectCard(card.id)} disabled={correct.includes(card.id) ? true : (selected.includes(card.id)? true : false)}>
+                    <View style={[{height: "100%", width:"100%", backgroundColor: "white", position:"absolute", zIndex: 10, alignItems:"center", justifyContent:"center"}, correct.includes(card.id) ? {opacity: 0} : (wrong.includes(card.id) ? {opacity: 0} : null)]}>
+                      <Image source={require('../../../assets/headerLogo.png')} style={[{width:"70%", resizeMode:"contain", transform:[{perspective: 1000}, {rotateY: "180deg"}]}, selected.includes(card.id) ? {opacity:0} : null]}/>
+                    </View>  
+                    <View style={{height:"100%", width:"100%", padding: 5}}>
+                      <Text adjustsFontSizeToFit={true} numberOfLines={1} style={[styles.cardText]}>
                         {card.text}
                       </Text>
+                    </View>
                   </TouchableOpacity>
                 </Animated.View>
               ))}
@@ -368,6 +383,6 @@ export default function Cards({ level, part, onAnswerCorrect }) {
         alignItems:"center",
         justifyContent:"center",
         borderRadius: 10,
-        padding: 5,
+        overflow:"hidden"
       }
     });
